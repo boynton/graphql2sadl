@@ -13,4 +13,4 @@ This outputs the SADL types represented by the graphql source, in SADL soruce fo
     $ graphql2sadl -j yourfile.graphql
 
 
-_Note: this tool is incomplete, more of a demo than a complete tool._
+_Note: this tool is incomplete, more of a demo than anything._
