@@ -9,6 +9,7 @@ import (
 	"strings"
 
 	"github.com/boynton/sadl"
+	"github.com/boynton/sadl/oas"
 	"github.com/graphql-go/graphql/language/ast"
 	"github.com/graphql-go/graphql/language/parser"
 	"github.com/graphql-go/graphql/language/source"
@@ -21,6 +22,7 @@ var verbose bool = false
 
 func main() {
 	pJSON := flag.Bool("j", false, "set to true to format the file as the JSON SADL model, rather than SADL source")
+	pOAS := flag.Bool("oas", false, "set to true to output the file as OpenAPI Spec v3 instead of SADL")
 	flag.Parse()
 	args := flag.Args()
 	if len(args) != 1 {
@@ -51,6 +53,13 @@ func main() {
 	}
 	if *pJSON {
 		fmt.Println(sadl.Pretty(model))
+	} else if *pOAS {
+		gen := oas.NewGenerator(model, "/tmp") //DO: remove the outdir arg, will print to stdout
+		doc, err := gen.ExportToOAS3()
+		if err != nil {
+			log.Fatalf("*** Cannot convert to OAS v3: %v\n", err)
+		}
+		fmt.Println(sadl.Pretty(doc))
 	} else {
 		fmt.Println(sadl.Decompile(model))
 	}
